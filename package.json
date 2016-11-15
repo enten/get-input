@@ -1,0 +1,26 @@
+{
+  "name": "get-input",
+  "version": "0.1.0",
+  "description": "A lightweight library to get a value from argv and env",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enten/get-input.git"
+  },
+  "keywords": [
+    "argv",
+    "env",
+    "get",
+    "input",
+    "process"
+  ],
+  "author": "Steven Enten <steven@enten.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/enten/get-input/issues"
+  },
+  "homepage": "https://github.com/enten/get-input#readme"
+}
