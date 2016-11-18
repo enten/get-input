@@ -5,8 +5,11 @@ function autocast (val) {
   return val
 }
 
-function getInput (opts) {
-  opts = opts || {}
+function getInput () {
+  var opts = {}
+  Array.prototype.forEach.call(arguments, function (arg) {
+    (Object.assign || polyfillAssign)(opts, arg)
+  })
   opts.argv = opts.argv || process.argv.slice(2)
   opts.endMark = opts.endMark || '--'
   opts.env = opts.env || process.env
@@ -40,6 +43,24 @@ function getInputFromEnv (env, keys) {
       return autocast(env[key])
     }
   }
+}
+
+function polyfillAssign (target) {
+  if (target === undefined || target === null) {
+    throw new TypeError('Cannot convert undefined or null to object')
+  }
+  var output = Object(target)
+  for (var index = 1; index < arguments.length; index++) {
+    var source = arguments[index]
+    if (source !== undefined && source !== null) {
+      for (var nextKey in source) {
+        if (source.hasOwnProperty(nextKey)) {
+          output[nextKey] = source[nextKey]
+        }
+      }
+    }
+  }
+  return output
 }
 
 exports = module.exports = getInput
