@@ -6,22 +6,35 @@ function autocast (val) {
 }
 
 function getInput () {
-  var opts = {}
-  Array.prototype.forEach.call(arguments, function (arg) {
-    (Object.assign || polyfillAssign)(opts, arg)
-  })
-  opts.argv = opts.argv || process.argv.slice(2)
+  var args = Array.prototype.slice.call(arguments)
+  var opts = args.reduce(function (acc, arg) {
+    return (Object.assign || polyfillAssign)(acc, arg)
+  }, {})
+  opts.argv = opts.argv || process.argv
   if (opts.endMark) {
     var doubleDash = opts.argv.indexOf(typeof opts.endMark === 'string' ? opts.endMark : '--')
     opts.argv = ~doubleDash ? opts.argv.slice(0, doubleDash) : opts.argv
   }
+  if (~[typeof args[0], typeof opts.index].indexOf('number')) {
+    return getInputCommand(opts.argv, opts.index != null ? opts.index : args[0]) || opts.defaultValue
+  }
   opts.env = opts.env || process.env
-  var argvValue = opts.argvKey && getInputFromArgv(opts.argv, opts.argvKey, opts.endMark)
+  var argvValue = opts.argvKey && getInputFromArgv(opts.argv, opts.argvKey)
   var envValue = opts.envKey && getInputFromEnv(opts.env, opts.envKey)
   if (argvValue == null && envValue == null) {
     return opts.defaultValue
   }
   return opts.priority === 'env' ? envValue || argvValue : argvValue || envValue
+}
+
+function getInputCommand (argv, index) {
+  var command = argv.filter(function (val) {
+    return val.charAt(0) !== '-'
+  })
+  if (typeof index === 'number') {
+    return command.slice(index).shift()
+  }
+  return command
 }
 
 function getInputFromArgv (argv, keys) {
@@ -64,5 +77,6 @@ function polyfillAssign (target) {
 
 exports = module.exports = getInput
 exports.autocast = autocast
+exports.command = getInputCommand
 exports.fromArgv = getInputFromArgv
 exports.fromEnv = getInputFromEnv

@@ -1,6 +1,6 @@
 {
   "name": "get-input",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A lightweight library to get a value from argv and env",
   "main": "index.js",
   "scripts": {
