@@ -15,6 +15,9 @@ function getInput () {
     var doubleDash = opts.argv.indexOf(typeof opts.endMark === 'string' ? opts.endMark : '--')
     opts.argv = ~doubleDash ? opts.argv.slice(0, doubleDash) : opts.argv
   }
+  if (~[args[0], opts.index].indexOf('_')) {
+    return getInputCommand(opts.argv)
+  }
   if (~[typeof args[0], typeof opts.index].indexOf('number')) {
     return getInputCommand(opts.argv, opts.index != null ? opts.index : args[0]) || opts.defaultValue
   }
